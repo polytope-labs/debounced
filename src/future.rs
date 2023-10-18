@@ -3,8 +3,8 @@ use std::pin::Pin;
 use std::task::{Context, Poll};
 use std::time::Duration;
 
-use futures_timer::Delay;
 use futures_util::FutureExt;
+use tokio::time::{sleep, Sleep};
 
 /// Future that resolves into a value after a given duration has passed.
 ///
@@ -20,7 +20,7 @@ use futures_util::FutureExt;
 /// # })
 /// ```
 pub struct Delayed<T> {
-    sleep: Pin<Box<Delay>>,
+    sleep: Pin<Box<Sleep>>,
     value: Option<T>,
 }
 
@@ -29,7 +29,7 @@ impl<T> Delayed<T> {
     /// duration has passed.
     pub fn new(value: T, duration: Duration) -> Delayed<T> {
         Delayed {
-            sleep: Box::pin(Delay::new(duration)),
+            sleep: Box::pin(sleep(duration)),
             value: Some(value),
         }
     }
